@@ -2,9 +2,12 @@ package com.project.asus.coolweather.util;
 
 import android.text.TextUtils;
 
+import com.google.gson.Gson;
 import com.project.asus.coolweather.db.City;
 import com.project.asus.coolweather.db.Country;
 import com.project.asus.coolweather.db.Province;
+import com.project.asus.coolweather.gson.Weather;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -71,5 +74,18 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    //解析JSON数据天气信息为Weather实体类
+    public static Weather handleWeatherResponse(String response){
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            JSONArray jsonArray=jsonObject.getJSONArray("HeWeather");
+            String weatherContent=jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent,Weather.class);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }
